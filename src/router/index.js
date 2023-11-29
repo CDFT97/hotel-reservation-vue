@@ -17,6 +17,11 @@ const routes = [
         component: () => import("@/pages/Bookings/Create.vue"),
       },
       {
+        name: "booking.edit",
+        path: "/bookings/edit/:id",
+        component: () => import("@/pages/Bookings/Create.vue"),
+      },
+      {
         name: "clients.index",
         path: "/clients",
         component: () => import("@/pages/Clients/Index.vue"),

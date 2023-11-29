@@ -5,12 +5,13 @@
       cliente en el número de personas."
     />
 
-    <h3 class="text-2xl font-bold text-left py-2">Crear Reservación</h3>
+    <h3 class="text-2xl font-bold text-left py-2">{{ title }}</h3>
 
     <div>
       <div class="w-full md:w-1/2 px-3 mb-6 mb-4">
         <select
           @change="setClient"
+          v-model="clients_list"
           id="clients"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         >
@@ -126,7 +127,7 @@
               disabled
             />
           </div>
-
+          
           <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label
               class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -143,6 +144,25 @@
               step="0.01"
               required
             />
+          </div>
+
+          <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0" v-if="this.mode != 'create'">
+            <label
+              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              for="amount"
+            >
+              Estado
+            </label>
+            <select
+            v-model="form.status"
+              id="clients"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            >
+              <option selected value="">Seleccione un estado</option>
+              <option value="provisional">Provisional</option>
+              <option value="confirmada">Confirmada</option>
+              <option value="cancelada">Cancelada</option>
+            </select>
           </div>
         </div>
         <div
@@ -227,6 +247,8 @@ export default {
       alertsStore: useAlertsStore(),
       hotelStore: useHotelStore(),
       clients: [],
+      title: "Crear Reserva",
+      mode: "create",
       form: {
         client_name: "",
         client_dni: "",
@@ -234,6 +256,7 @@ export default {
         hotel_id: "",
         arrival_date: "",
         departure_date: "",
+        status: "",
         nights_number: 0,
         amount: 0,
         guests: {
@@ -242,6 +265,7 @@ export default {
         },
       },
       add_guests: false,
+      clients_list: "",
     };
   },
   computed: {},
@@ -249,8 +273,23 @@ export default {
   mounted() {
     this.setHotel();
     this.getClients();
+    this.checkMethod();
   },
   methods: {
+    checkMethod() {
+      if (this.$route.params.id) {
+        this.title = "Editar Reserva";
+        this.getBooking(this.$route.params.id);
+      }
+    },
+    async getBooking(id) {
+      try {
+        const { data } = await axios.get(`/bookings/${id}`);
+        this.fillForm(data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
     setHotel() {
       const hotel_id = this.hotelStore.getHotelId;
       if (!hotel_id) this.$router.push({ name: "home" });
@@ -301,6 +340,13 @@ export default {
       if (this.form.client_name == "") {
         return this.alertsStore.warning("Debe seleccionar un cliente");
       }
+      if (this.create === "create") {
+        await this.store();
+      } else {
+        await this.update();
+      }
+    },
+    async store() {
       try {
         await axios.post("/bookings", this.form);
         this.alertsStore.success("Reservación creada");
@@ -308,6 +354,31 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    async update() {
+      try {
+        await axios.put(`/bookings/${this.$route.params.id}`, this.form);
+        this.alertsStore.success("Reservación Actualizada");
+        this.$router.push({ name: "home" });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    fillForm(booking) {
+      this.mode = "edit";
+      this.form.status = booking.status;
+      this.form.client_name = booking.client.name;
+      this.form.client_dni = booking.client.dni;
+      this.form.client_id = booking.client.id;
+      this.form.hotel_id = booking.hotel.id;
+      this.form.arrival_date = booking.arrival_date;
+      this.form.departure_date = booking.departure_date;
+      this.form.nights_number = Number(booking.nights_number);
+      this.form.amount = Number(booking.amount);
+      this.form.guests.total_guests = Number(booking.guests.total_guests);
+      if (booking.guests.total_guests > 1) this.add_guests = true;
+      this.form.guests.guests_information = booking.guests.guests_information;
+      this.clients_list = booking.client.id;
     },
   },
   watch: {

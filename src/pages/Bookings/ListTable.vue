@@ -119,15 +119,16 @@ export default {
       }
     },
     handleAction(e, booking) {
+      const selected_option = this.actions[e.target.value];
       if (this.updates_options.includes(Number(e.target.value))) {
         const booking_updated = {...booking}
-        booking_updated.status = this.actions[e.target.value];
+        booking_updated.status = selected_option;
         this.updateStatus(booking_updated);
-      } else if(this.actions[e.target.value] == "ver"){
+      } else if(selected_option == "ver"){
        this.$emit("show", booking);
+      } else if(selected_option == "editar"){
+        this.$router.push({ name: "booking.edit", params: { id: booking.id } });
       }
-
-
       // Reset select to default
       this.selectActions = 5;
     },
