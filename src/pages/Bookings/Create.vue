@@ -1,132 +1,319 @@
 <template>
   <div>
+    <InfoAlert
+      msg="Se entiende que el cliente es el primer huesped, por lo que se incluye al
+      cliente en el número de personas."
+    />
+
     <h3 class="text-2xl font-bold text-left py-2">Crear Reservación</h3>
 
     <div>
-      <form class="w-full w-2/3">
+      <div class="w-full md:w-1/2 px-3 mb-6 mb-4">
+        <select
+          @change="setClient"
+          id="clients"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        >
+          <option selected value="">Seleccione un cliente</option>
+          <option v-for="client in clients" :key="client.id" :value="client.id">
+            {{ client.name }} - {{ client.dni }}
+          </option>
+        </select>
+      </div>
+      <form class="w-full w-3/3" @submit.prevent="handleSubmit">
         <div class="flex flex-wrap -mx-3 mb-6">
           <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
               class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-name"
+              for="client_name"
             >
-              First Name
+              Nombre Cliente
             </label>
             <input
-              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
+              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="client_name"
               type="text"
-              placeholder="Jane"
+              v-model="form.client_name"
+              readonly
+              required
             />
-            <p class="text-red-500 text-xs italic">
-              Please fill out this field.
-            </p>
           </div>
           <div class="w-full md:w-1/2 px-3">
             <label
               class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-last-name"
+              for="client_dni"
             >
-              Last Name
+              Documento Cliente
             </label>
             <input
               class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="grid-last-name"
+              id="client_dni"
               type="text"
-              placeholder="Doe"
+              v-model="form.client_dni"
+              required
+              disabled
             />
-          </div>
-        </div>
-        <div class="flex flex-wrap -mx-3 mb-6">
-          <div class="w-full px-3">
-            <label
-              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-password"
-            >
-              Password
-            </label>
-            <input
-              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="grid-password"
-              type="password"
-              placeholder="******************"
-            />
-            <p class="text-gray-600 text-xs italic">
-              Make it as long and as crazy as you'd like
-            </p>
           </div>
         </div>
         <div class="flex flex-wrap -mx-3 mb-2">
           <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label
               class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-city"
+              for="num_guests"
             >
-              City
+              Nº de Personas
             </label>
             <input
               class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="grid-city"
-              type="text"
-              placeholder="Albuquerque"
+              id="num_guests-city"
+              v-model="form.guests.total_guests"
+              type="number"
+              min="1"
+              step="1"
+              required
             />
           </div>
           <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label
               class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-state"
+              for="arrival_date"
             >
-              State
-            </label>
-            <div class="relative">
-              <select
-                class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                id="grid-state"
-              >
-                <option>New Mexico</option>
-                <option>Missouri</option>
-                <option>Texas</option>
-              </select>
-              <div
-                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-              >
-                <svg
-                  class="fill-current h-4 w-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-            <label
-              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-zip"
-            >
-              Zip
+              Fecha de llegada
             </label>
             <input
               class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="grid-zip"
-              type="text"
-              placeholder="90210"
+              id="arrival_date-city"
+              type="date"
+              v-model="form.arrival_date"
+              required
+            />
+          </div>
+
+          <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+            <label
+              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              for="num_nights"
+            >
+              Cantidad de noches
+            </label>
+            <input
+              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="num_nights"
+              @change="setTotalNights"
+              type="number"
+              v-model="form.nights_number"
+              min="1"
+              step="1"
+              required
             />
           </div>
         </div>
+
+        <div class="flex flex-wrap -mx-3 mb-2">
+          <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+            <label
+              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              for="arrival_date"
+            >
+              Fecha de salida
+            </label>
+            <input
+              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="arrival_date-city"
+              type="date"
+              v-model="form.departure_date"
+              required
+              disabled
+            />
+          </div>
+
+          <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+            <label
+              class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              for="amount"
+            >
+              Valor
+            </label>
+            <input
+              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              id="amount"
+              v-model="form.amount"
+              type="number"
+              min="1"
+              step="0.01"
+              required
+            />
+          </div>
+        </div>
+        <div
+          class="flex items-center mb-4 mt-2"
+          v-if="this.form.guests.total_guests > 1"
+        >
+          <input
+            id="default-checkbox"
+            type="checkbox"
+            v-model="add_guests"
+            class="w-4 h-4 text-blue-600 bg-black border-black rounded focus:ring-blue-500 focus:ring-2 cursor-pointer"
+          />
+          <label
+            for="default-checkbox"
+            class="ms-2 text-sm font-medium text-gray-900 ml-2 cursor-pointer"
+            >Agregar huespedes</label
+          >
+        </div>
+        <section v-if="add_guests">
+          <h3 class="text-xl font-bold py-2">Información de los huespedes</h3>
+          <div
+            class="flex flex-wrap -mx-3 mb-6"
+            v-for="(guest, key) in form.guests.total_guests - 1"
+            :key="guest"
+          >
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <label
+                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="client_name"
+              >
+                Nombre Huesped Nº {{ guest + 1 }}
+              </label>
+              <input
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                id="client_name"
+                v-model="form.guests.guests_information[key].name"
+                type="text"
+                required
+              />
+            </div>
+            <div class="w-full md:w-1/2 px-3">
+              <label
+                class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                for="client_dni"
+              >
+                Documento Huesped Nº {{ guest + 1 }}
+              </label>
+              <input
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                id="client_dni"
+                type="text"
+                v-model="form.guests.guests_information[key].dni"
+                required
+              />
+            </div>
+          </div>
+        </section>
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Guardar
+        </button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import { useAlertsStore } from "@/stores/alerts";
+import { useHotelStore } from "@/stores/hotel";
+import axios from "axios";
+import moment from "moment";
+import InfoAlert from "@/components/InfoAlert.vue";
 export default {
   name: "create_booking_form",
+  components: {
+    InfoAlert,
+  },
+  props: {},
+  data() {
+    return {
+      alertsStore: useAlertsStore(),
+      hotelStore: useHotelStore(),
+      clients: [],
+      form: {
+        client_name: "",
+        client_dni: "",
+        client_id: "",
+        hotel_id: "",
+        arrival_date: "",
+        departure_date: "",
+        nights_number: 0,
+        amount: 0,
+        guests: {
+          total_guests: 1,
+          guests_information: [],
+        },
+      },
+      add_guests: false,
+    };
+  },
+  computed: {},
+  created() {},
+  mounted() {
+    this.setHotel();
+    this.getClients();
+  },
+  methods: {
+    setHotel() {
+      const hotel_id = this.hotelStore.getHotelId;
+      if (!hotel_id) this.$router.push({ name: "home" });
+      this.form.hotel_id = hotel_id;
+    },
+    async getClients() {
+      try {
+        const { data } = await axios.get("/clients");
+        this.clients = data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    setClient(e) {
+      if (e.target.value) {
+        const selected_client = this.clients.find(
+          (client) => client.id == e.target.value
+        );
+        this.form.client_dni = selected_client.dni;
+        this.form.client_name = selected_client.name;
+        this.form.client_id = selected_client.id;
+      } else {
+        this.form.client_dni = "";
+        this.form.client_name = "";
+        this.form.client_id = "";
+      }
+    },
+    setTotalNights() {
+      if (!this.form.arrival_date) {
+        this.alertsStore.warning("Debe seleccionar la fecha de llegada");
+        return (this.form.nights_number = 0);
+      }
+      this.form.departure_date = moment(this.form.arrival_date)
+        .add(this.form.nights_number, "d")
+        .format("YYYY-MM-DD");
+    },
+    addGuests() {
+      if (this.form.guests.total_guests > 1) {
+        for (let i = 1; i < this.form.guests.total_guests; i++) {
+          this.form.guests.guests_information.push({
+            name: "",
+            dni: "",
+          });
+        }
+      }
+    },
+    async handleSubmit() {
+      if (this.form.client_name == "") {
+        return this.alertsStore.warning("Debe seleccionar un cliente");
+      }
+      try {
+        await axios.post("/bookings", this.form);
+        this.alertsStore.success("Reservación creada");
+        this.$router.push({ name: "home" });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
+  watch: {
+    "form.guests.total_guests"() {
+      this.addGuests();
+    },
+  },
 };
 </script>
-
-<style>
-</style>

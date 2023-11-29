@@ -93,7 +93,7 @@
                         Información de los otros huespedes
                       </h3>
                       <span class="mx-3">
-                        <strong class="mr-1">Cantidad de huespedes:</strong>
+                        <strong class="mr-1">Cantidad de huespedes (incluyendo al cliente principal):</strong>
                         <span class="text-gray-700 capitalize">{{ booking.guests.total_guests }}</span>
                       </span>
 
@@ -168,9 +168,6 @@ export default {
     },  
   },
   watch: {
-    reservation() {
-      console.log("CAMBIO")
-    }
   }
 };
 </script>

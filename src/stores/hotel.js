@@ -7,7 +7,7 @@ export const useHotelStore = defineStore("hotel", {
         }
     },
     getters: {
-      
+        getHotelId: (state) => state.hotel !== null ? state.hotel.id : null,
     },
     actions: {
         setHotel(hotel) {
