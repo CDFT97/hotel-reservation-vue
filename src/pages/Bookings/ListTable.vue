@@ -1,5 +1,6 @@
 <template>
   <div>
+    <SearchForm @search="search" @clearForm="getBookings"></SearchForm>
     <Spinner></Spinner>
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead
@@ -69,10 +70,12 @@ import axios from "axios";
 import { useAlertsStore } from "@/stores/alerts";
 import Spinner from "@/components/Spinner.vue"
 import { useSpinnerStore } from "@/stores/spinner";
+import SearchForm from "@/pages/Bookings/SearchForm.vue"
 export default {
   name: "bookings-list-table",
   components: {
-    Spinner
+    Spinner,
+    SearchForm
   },
   props: [],
   data() {
@@ -134,6 +137,18 @@ export default {
       // Reset select to default
       this.selectActions = 5;
     },
+    async search(data_to_search){
+      try {
+        console.log(data_to_search);
+        this.spinnerStore.showSpinner();
+        const { data } = await axios.post("/bookings/search", data_to_search);
+        this.bookings = data;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.spinnerStore.hideSpinner();
+      }
+    }
   },
   mounted() {
     this.getBookings();

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="text-2xl font-bold text-left py-2">{{ useHotel.hotel != null ? "Hotel Administration" : "Create Hotel" }}</h3>
+    <h3 class="text-2xl font-bold text-left py-2">{{ useHotel.hotel != null ? "Reportes de Hotel" : "Crear Hotel" }}</h3>
     <div class="overflow-x-auto relative sm:rounded-lg">
       <template v-if="useHotel.hotel">
         <ListTable @show="setBookingToShow"></ListTable>
