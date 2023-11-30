@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h3 class="text-2xl font-bold text-left py-2">{{ useHotel.hotel != null ? "Reportes de Hotel" : "Crear Hotel" }}</h3>
+    <h3 class="text-2xl font-bold text-left py-2">{{ useHotel.getHotelId != null ? "Reportes de Hotel" : "Crear Hotel" }}</h3>
     <div class="overflow-x-auto relative sm:rounded-lg">
-      <template v-if="useHotel.hotel">
+      <template v-if="useHotel.getHotelId != null">
         <ListTable @show="setBookingToShow"></ListTable>
         <DetailsModal :booking="booking_details" :showModal="showModal" @openModal="openModal" @closeModal="closeModal"></DetailsModal>
       </template>

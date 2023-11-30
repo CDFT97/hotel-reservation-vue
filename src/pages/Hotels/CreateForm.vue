@@ -1,67 +1,157 @@
 <template>
-  <form class="max-w-sm mx-auto">
-    <div class="mb-5">
-      <label
-        for="email"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >Your email</label
-      >
-      <input
-        type="email"
-        id="email"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder="name@flowbite.com"
-        required
-      />
-    </div>
-    <div class="mb-5">
-      <label
-        for="password"
-        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-        >Your password</label
-      >
-      <input
-        type="password"
-        id="password"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        required
-      />
-    </div>
-    <div class="flex items-start mb-5">
-      <div class="flex items-center h-5">
+  <form class="" @submit.prevent="handleSubmit">
+    <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="name"
+        >
+          Nombre
+        </label>
         <input
-          id="remember"
-          type="checkbox"
-          value=""
-          class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="name"
+          type="text"
+          v-model="form.name"
+        />
+      </div>
+      <div class="w-full md:w-1/2 px-3">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="address"
+        >
+          Dirección
+        </label>
+        <input
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="address"
+          type="text"
+          v-model="form.address"
           required
         />
       </div>
-      <label
-        for="remember"
-        class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-        >Remember me</label
-      >
+    </div>
+    <div class="flex flex-wrap -mx-3 mb-2">
+      <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="country"
+        >
+          Pais
+        </label>
+        <input
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="country"
+          type="text"
+          v-model="form.country"
+          required
+        />
+      </div>
+      <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="state"
+        >
+          Estado / Departamento
+        </label>
+        <input
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="state"
+          type="text"
+          v-model="form.state"
+          required
+        />
+      </div>
+
+      <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="city"
+        >
+          Ciudad
+        </label>
+        <input
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="city"
+          type="text"
+          v-model="form.city"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="flex flex-wrap -mx-3 mb-2">
+      <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="nit"
+        >
+          Nit
+        </label>
+        <input
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="nit"
+          type="text"
+          v-model="form.nit"
+          required
+        />
+      </div>
+
+      <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+        <label
+          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          for="phone"
+        >
+          Telefono
+        </label>
+        <input
+          class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          id="phone"
+          v-model="form.phone"
+          type="text"
+        />
+      </div>
     </div>
     <button
-      type="submit"
-      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
     >
-      Submit
+      Guardar
     </button>
   </form>
 </template>
 
 <script>
+import axios from 'axios';
+import { useHotelStore } from '@/stores/hotel';
 export default {
   name: "hotel-create-form",
   components: {},
   props: [],
   data() {
-    return {};
+    return {
+      hotelStore: useHotelStore(),
+      form: {
+        name: "",
+        address: "",
+        country: "",
+        state: "",
+        city: "",
+        nit: "",
+        phone: ""
+      }
+    };
   },
   computed: {},
-  methods: {},
+  methods: {
+    async handleSubmit() {
+      try {
+        const {data} =await axios.post("/hotels", this.form);
+        this.hotelStore.setHotel(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  },
   mounted() {},
 };
 </script>

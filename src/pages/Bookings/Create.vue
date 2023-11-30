@@ -340,7 +340,7 @@ export default {
       if (this.form.client_name == "") {
         return this.alertsStore.warning("Debe seleccionar un cliente");
       }
-      if (this.create === "create") {
+      if (this.mode === "create") {
         await this.store();
       } else {
         await this.update();
