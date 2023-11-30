@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Spinner v-if="isLoading"></Spinner>
+    <Spinner></Spinner>
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead
         class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
@@ -68,6 +68,7 @@
 import axios from "axios";
 import { useAlertsStore } from "@/stores/alerts";
 import Spinner from "@/components/Spinner.vue"
+import { useSpinnerStore } from "@/stores/spinner";
 export default {
   name: "bookings-list-table",
   components: {
@@ -78,6 +79,7 @@ export default {
     return {
       bookings: [],
       userAlerts: useAlertsStore(),
+      spinnerStore: useSpinnerStore(),
       actions: {
         0: "editar",
         1: "cancelada",
@@ -94,18 +96,18 @@ export default {
   methods: {
     async getBookings() {
       try {
-        this.isLoading = true;
+        this.spinnerStore.showSpinner();
         const { data } = await axios.get("/bookings");
         this.bookings = data;
       } catch (error) {
         console.error(error);
       } finally {
-        this.isLoading = false;
+        this.spinnerStore.hideSpinner();
       }
     },
     async updateStatus(booking) {
       try {
-        this.isLoading = true;
+        this.spinnerStore.showSpinner();
         await axios.put(`/bookings/${booking.id}`,booking);
         this.userAlerts.success("Reservación actualizada!");
         this.getBookings();
@@ -115,7 +117,7 @@ export default {
         );
         console.error(error);
       } finally {
-        this.isLoading = false;
+        this.spinnerStore.hideSpinner();
       }
     },
     handleAction(e, booking) {

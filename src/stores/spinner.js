@@ -7,10 +7,10 @@ export const useSpinnerStore = defineStore("spinner", {
   },
   getters: {},
   actions: {
-    Show() {
+    showSpinner() {
       this.show = true;
     },
-    Hide() {
+    hideSpinner() {
       this.show = false;
     },
   },
