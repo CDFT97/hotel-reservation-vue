@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { useSpinnerStore } from "@/stores/spinner";
+const spinner = useSpinnerStore();
 export const useClientsStore = defineStore("clients", {
   state: () => {
     return {
@@ -19,10 +21,13 @@ export const useClientsStore = defineStore("clients", {
   actions: {
     async setClients() {
       try {
+        spinner.showSpinner()
         const { data } = await axios.get("/clients");
         this.clients_list = data;
       } catch (error) {
         console.error(error);
+      } finally {
+        spinner.hideSpinner()
       }
     },
     setClientToEdit(data) {

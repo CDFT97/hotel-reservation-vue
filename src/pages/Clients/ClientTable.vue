@@ -44,6 +44,7 @@
 import axios from "axios";
 import { useAlertsStore } from "@/stores/alerts.js";
 import { useClientsStore } from "@/stores/clients.js";
+import { useSpinnerStore } from "@/stores/spinner.js";
 export default {
   name: "clients-table",
   components: {
@@ -53,6 +54,7 @@ export default {
     return {
       userAlerts: useAlertsStore(),
       clientsStore: useClientsStore(),
+      spinnerStore: useSpinnerStore(),
       form: {
         name: "",
         dni: "",
@@ -69,6 +71,7 @@ export default {
     },
     async deleteClient(client) {
       try {
+        this.spinnerStore.showSpinner();
         const res = confirm(
           `¿Desea eliminar al cliente : ${client.name} con documento : ${client.dni}?`
         );
@@ -80,6 +83,8 @@ export default {
       } catch (error) {
         console.error(error);
         this.userAlerts.error(error.response.data.message);
+      } finally {
+        this.spinnerStore.hideSpinner();
       }
     },
   },

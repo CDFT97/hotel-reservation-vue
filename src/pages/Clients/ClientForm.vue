@@ -45,6 +45,7 @@
 <script>
 import axios from "axios";
 import { useAlertsStore } from "@/stores/alerts";
+import { useSpinnerStore } from "@/stores/spinner";
 import { useClientsStore } from "@/stores/clients";
 export default {
   name: "client-form",
@@ -55,6 +56,7 @@ export default {
     return {
       useAlerts: useAlertsStore(),
       useClients: useClientsStore(),
+      spinnerStore: useSpinnerStore()
     };
   },
   computed: {},
@@ -71,6 +73,7 @@ export default {
     },
     async update() {
       try {
+        this.spinnerStore.showSpinner()
         await axios.put(`/clients/${this.useClients.form.id}`, this.useClients.form);
         this.useAlerts.success("Cliente Actualizado!");
       } catch (error) {
@@ -78,10 +81,13 @@ export default {
         this.useAlerts.error(
           "Ha ocurrido un error por favor contacte con el administrador"
         );
+      } finally {
+        this.spinnerStore.hideSpinner()
       }
     },
     async create() {
       try {
+        this.spinnerStore.showSpinner()
         await axios.post("/clients", this.useClients.form);
         this.useAlerts.success("Cliente agregado!");
       } catch (error) {
@@ -89,6 +95,8 @@ export default {
         this.useAlerts.error(
           "Ha ocurrido un error por favor contacte con el administrador"
         );
+      } finally {
+        this.spinnerStore.hideSpinner()
       }
     },
   },

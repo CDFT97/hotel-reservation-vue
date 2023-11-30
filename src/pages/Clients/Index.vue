@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ClientForm @getClients="getClients" :dataToEdit="data_to_edit"></ClientForm>
+    <ClientForm></ClientForm>
     <Spinner></Spinner>
     <ClientTable/>
   </div>
