@@ -7,7 +7,7 @@ npm install
 
 ## Enviroments vars
 ```
-create .env with backend api url like VUE_APP_BACKEND_API=127.0.0.1:8080
+create .env with backend api url like VUE_APP_BACKEND_API=127.0.0.1:8000
 ```
 
 
